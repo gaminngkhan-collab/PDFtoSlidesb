@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="text-center mb-5">
+                <h1 class="display-4 mb-3">
+                    <i data-feather="arrow-right-circle" class="me-3"></i>
+                    PDFtoSlides
+                </h1>
+                <p class="lead text-muted">
+                    Transform your PDF documents into editable PowerPoint presentations. 
+                    Each PDF page becomes a slide with fully editable text content.
+                </p>
+            </div>
+
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show" role="alert">
+                            <i data-feather="{{ 'alert-circle' if category == 'error' else 'check-circle' }}" class="me-2"></i>
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <!-- Download Section (shown after successful conversion) -->
+            {% if download_file %}
+            <div class="card mb-4 border-success">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-success">
+                        <i data-feather="download" class="me-2"></i>
+                        Conversion Complete!
+                    </h5>
+                    <p class="card-text">
+                        Your PowerPoint presentation is ready for download.
+                    </p>
+                    <a href="{{ url_for('download_file', filename=download_file) }}" 
+                       class="btn btn-success btn-lg">
+                        <i data-feather="download" class="me-2"></i>
+                        Download {{ original_name }}.pptx
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Upload Form -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i data-feather="upload" class="me-2"></i>
+                        Upload PDF File
+                    </h5>
+                    
+                    <form action="{{ url_for('upload_file') }}" method="post" 
+                          enctype="multipart/form-data" id="uploadForm">
+                        <div class="mb-4">
+                            <label for="file" class="form-label">Choose PDF File</label>
+                            <input type="file" class="form-control" id="file" name="file" 
+                                   accept=".pdf" required>
+                            <div class="form-text">
+                                <i data-feather="info" class="me-1"></i>
+                                Maximum file size: 20MB. Only PDF files are supported.
+                            </div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg" id="uploadBtn">
+                                <span class="upload-text">
+                                    <i data-feather="arrow-up-circle" class="me-2"></i>
+                                    Convert to PowerPoint
+                                </span>
+                                <span class="upload-loading d-none">
+                                    <span class="spinner-border spinner-border-sm me-2"></span>
+                                    Converting...
+                                </span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Features Section -->
+            <div class="row mt-5">
+                <div class="col-md-4 mb-3">
+                    <div class="text-center">
+                        <div class="feature-icon mb-3">
+                            <i data-feather="zap" class="text-primary"></i>
+                        </div>
+                        <h6>Fast Conversion</h6>
+                        <small class="text-muted">
+                            Quick and efficient PDF to PowerPoint conversion
+                        </small>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="text-center">
+                        <div class="feature-icon mb-3">
+                            <i data-feather="image" class="text-primary"></i>
+                        </div>
+                        <h6>High Quality</h6>
+                        <small class="text-muted">
+                            Maintains image quality and proper slide dimensions
+                        </small>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="text-center">
+                        <div class="feature-icon mb-3">
+                            <i data-feather="shield" class="text-primary"></i>
+                        </div>
+                        <h6>Secure</h6>
+                        <small class="text-muted">
+                            Files are automatically cleaned up after processing
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Instructions -->
+            <div class="card mt-4 bg-dark border-secondary">
+                <div class="card-body">
+                    <h6 class="card-title">
+                        <i data-feather="help-circle" class="me-2"></i>
+                        How it works
+                    </h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-2">
+                                    <i data-feather="check" class="text-success me-2"></i>
+                                    <small>Select your PDF file (max 20MB)</small>
+                                </li>
+                                <li class="mb-2">
+                                    <i data-feather="check" class="text-success me-2"></i>
+                                    <small>Click "Convert to PowerPoint"</small>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-2">
+                                    <i data-feather="check" class="text-success me-2"></i>
+                                    <small>Wait for the conversion to complete</small>
+                                </li>
+                                <li class="mb-2">
+                                    <i data-feather="check" class="text-success me-2"></i>
+                                    <small>Download your PowerPoint file</small>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
